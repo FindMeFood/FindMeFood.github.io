@@ -117,6 +117,7 @@ function initMap() {
             infoWindow.setContent('Location found');
             map.setCenter(pos);
             marker.setPosition(pos);
+            closeAlert();
 
             // Set destination, origin and travel mode.
             var request = {
@@ -152,22 +153,14 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     }
 }
 
-//transision para cerrar alerts
-var close = document.getElementsByClassName("closebtn");
-var i;
+function closeAlert(){
 
-// Loop through all close buttons
-for (i = 0; i < close.length; i++) {
-    // When someone clicks on a close button
-    close[i].onclick = function closeMessage(){
+    // Get the parent of <span class="closebtn"> (<div class="alert">)
+    var div = document.getElementById("alert");
 
-        // Get the parent of <span class="closebtn"> (<div class="alert">)
-        var div = this.parentElement;
+    // Set the opacity of div to 0 (transparent)
+    div.style.opacity = "0";
 
-        // Set the opacity of div to 0 (transparent)
-        div.style.opacity = "0";
-
-        // Hide the div after 600ms (the same amount of milliseconds it takes to fade out)
-        setTimeout(function(){ div.style.display = "none"; }, 600);
-    }
+    // Hide the div after 600ms (the same amount of milliseconds it takes to fade out)
+    setTimeout(function(){ div.style.display = "none"; }, 600);
 }
