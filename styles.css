@@ -14,3 +14,43 @@ html,body, #wrapper{
     position: absolute;
     z-index: 0;
 }
+h1{
+	background-color: white;
+	margin: 20px;
+	padding: 20px;
+	border-radius: 25px;
+}
+/* The alert message box */
+.alert{
+    position: fixed;
+    z-index: 5;
+    right: 50px;
+    top: 40px;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    margin-bottom: 15px;
+    opacity: 1;
+    transition: opacity 0.6s; /* 600ms to fade out */
+    /*box-shadow: 2px 2px 5px rgba(34,34,34,0.6);*/
+    border-radius: 25px;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.alert .closebtn {
+    padding-right: 10px;
+}
+
+.closebtn:hover {
+    color: grey;
+}
