@@ -5,12 +5,21 @@
 
     FindMeFood v1.4
 */
+//Esconder info RAPIDO
+$placeInfo = $('#placeInfo').hide();
+//Jquery objects
+$placeName = $('#nombre');
+$placeImg = $('#imagen');
+$placeDescription = $('#descripcion');
+
 
 //variables globales
 var map;
 var pos;
 var directionsDisplay;
-var rPlaces;
+var placesResults;
+var gotResults = false;
+var markers = [];
 var nightStyle = [
     {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
     {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
@@ -160,22 +169,25 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 function callback(results, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
 
-        var randomInt = parseInt(Math.random() * results.length);
+        placesResults = results;
+        gotResults = true;
 
-        // console.log('Results.lenght es ' + results.length);
-        // console.log('random numero es ' + randomInt);
-        // console.log(results[randomInt].place_id);
-        // console.log(results[randomInt]);
-
-        createMarker(results[randomInt]);
-        setDirection(results[randomInt]);
     }
+}
+
+function buttonClicked (){
+
+    var randomInt = parseInt(Math.random() * placesResults.length);
+
+    createMarker(placesResults[randomInt]);
+    setDirection(placesResults[randomInt]);
+    setInfo(placesResults[randomInt]);
+
 }
 
 //Maneja logica y procedimiento para renderizar el camino
 function setDirection(location){
     // Set destination, origin and travel mode.
-
     var request = {
         destination: location.vicinity,
         origin: pos,
@@ -195,11 +207,31 @@ function setDirection(location){
 }
 
 function createMarker(place) {
+
+    //delete existing markers
+    if(markers.length > 0){
+        for(i=0; i<markers.length; i++){
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
     var placeLoc = place.geometry.location;
     var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location
     });
+    //push marker into markers array
+    markers.push(marker);
+}
+
+function setInfo(place){
+
+    $placeName.text(place.name);
+    // $placeImg.attr('src = ' + place.photos[0]);
+    $placeDescription.text('Rating: ' + place.rating);
+
+    $placeInfo.fadeIn();
 }
 
 //Close "enable location services" alert
@@ -236,5 +268,8 @@ $(function() {
     $button.on('click', function(e) {
         //window.alert("picaste");
         rotateImg(e);
+        if(gotResults){
+            buttonClicked();
+        }
     });
 });
