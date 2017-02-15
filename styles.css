@@ -21,8 +21,14 @@ h1{
 	border-radius: 25px;
 }
 #aboveMap img{
-	padding: 50px;
 	height: 200px;
+
+	position: fixed;
+	left: 50%;
+	bottom: 5%;
+
+	margin-top: -100px; /* Negative half of height. */
+	margin-left: -100px; /* Negative half of width. */
 }
 
 /* The alert message box */
