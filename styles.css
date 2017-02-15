@@ -20,6 +20,11 @@ h1{
 	padding: 20px;
 	border-radius: 25px;
 }
+#aboveMap img{
+	padding: 50px;
+	height: 200px;
+}
+
 /* The alert message box */
 .alert{
     position: fixed;

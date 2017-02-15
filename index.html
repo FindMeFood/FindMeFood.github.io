@@ -10,14 +10,17 @@
 	<body>
 		<div id = "wrapper">
 			<div id = "aboveMap">
-				<h1>Find My Food</h1>
+				<!-- <h1>Find My Food</h1> -->
+				<img src ="images/FindeMeFoodIconB.svg"/>
 				<div class="alert" id="alert">
   					<span class="closebtn" onclick = "closeAlert()">&times;</span>Please enable location services in your browser.
   				</div>
 			</div>
 			<div id = "map"></div>
 		</div>
-		<script type="text/javascript" src="script.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script type="text/javascript" src="javascript/snabbt.min.js"></script>
+		<script type="text/javascript" src="javascript/script.js"></script>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXW1WwAuhZuyoH33mU-EwzMkrPGBCgsnw&callback=initMap"></script>
 	</body>
 </html>
