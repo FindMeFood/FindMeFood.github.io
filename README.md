@@ -1,6 +1,6 @@
 # FindMeFood
 
-![FindMeFood logo](images/FindeMeFoodIconB.svg | width=100)
+![FindMeFood logo](images/FindeMeFoodIconB.svg)
 
 Location based restaurant service. It detetcs restaurants in a 1km radius and displays  route towards it.
 
