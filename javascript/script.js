@@ -189,7 +189,7 @@ function buttonClicked (){
 function setDirection(location){
     // Set destination, origin and travel mode.
     var request = {
-        destination: location.vicinity,
+        destination: location.geometry.location,
         origin: pos,
         travelMode: 'DRIVING'
     };
