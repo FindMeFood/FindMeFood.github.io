@@ -305,7 +305,6 @@ function createMarker(place) {
         markers = [];
     }
 
-    var placeLoc = place.geometry.location;
     var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location
