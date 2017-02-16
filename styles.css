@@ -23,9 +23,15 @@ html,body, #wrapper{
     border-color: #000;
 }
 #placeInfo h1, #placeInfo p {
-
 	margin: 5px;
 }
+#placeInfo h1 {
+	font-size: 30px;
+}
+#placeInfo p {
+	font-size: 20px;
+}
+
 #aboveMap img{
 	height: 200px;
 
@@ -37,16 +43,32 @@ html,body, #wrapper{
 	margin-left: -100px; /* Negative half of width. */
 }
 
+@media (max-width: 765px) {
+    #aboveMap img{
+		height: 100px;
+
+		margin-top: -50px; /* Negative half of height. */
+		margin-left: -50px; /* Negative half of width. */
+	}
+	#placeInfo h1 {
+		font-size: 20px;
+	}
+	#placeInfo p {
+		font-size: 10px;
+	}
+
+}
+
 /* The alert message box */
 .alert{
     position: fixed;
     z-index: 5;
-    right: 50px;
-    top: 40px;
+    right: 0px;
+    top: 0px;
     padding: 10px;
     background-color: white;
     color: black;
-    margin-bottom: 15px;
+    margin: 50px;
     opacity: 1;
     transition: opacity 0.6s; /* 600ms to fade out */
     /*box-shadow: 2px 2px 5px rgba(34,34,34,0.6);*/
