@@ -5,21 +5,25 @@
 
     FindMeFood v1.4
 */
-//Esconder info RAPIDO
+//RAPIDLY hide placeInfo
 $placeInfo = $('#placeInfo').hide();
 //Jquery objects
 $placeName = $('#nombre');
 $placeImg = $('#imagen');
 $placeDescription = $('#descripcion');
 
+// $alert = $('#alert').remove();
+// $alert.append('<span class="closebtn">&times;</span>' + "Pene");
 
-//variables globales
-var map;
-var pos;
-var directionsDisplay;
-var placesResults;
-var gotResults = false;
-var markers = [];
+//Global variables
+var map;                        //google map object
+var pos;                        //client position
+var directionsDisplay;          //direction display object
+var placesResults;              //resultsObjects array
+var gotResults = false;         //boolean to enable resaraunt recomendation start
+var lastResultIndex = -1;       //variable to avoid place RErecomendation
+var randomInt = 0;              //variable to avoid place RErecomendation
+var markers = [];               //markerObject array, helps delete them
 var nightStyle = [
   {
     "elementType": "geometry",
@@ -191,10 +195,10 @@ var nightStyle = [
 ];
 
 function initMap() {
-    //Poscicion incial
+    //Initial positon
     var initLocation = {lat: 25.6515651, lng: -100.2895398};
 
-    //Inicializar mapa
+    //Initianlise map
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
         center: initLocation,
@@ -202,15 +206,24 @@ function initMap() {
         styles: nightStyle
     });
 
-    //Crear Direcciones
+    //Create directions renderer
     directionsDisplay = new google.maps.DirectionsRenderer({
-        map: map
+        map: map,
+        suppressMarkers: true
+    });
+    directionsDisplay.setOptions({
+        polylineOptions: {
+            strokeColor: 'black'
+        }
     });
 
-    //Intenter HTML5 geolocation
+    //Inicialisar infoWindow
+    var infoWindow;
+
+    //Try HTML5 geolocation
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(position){
-            //position is retived paramter
+            //position is a retrived paramter
             pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
@@ -218,15 +231,22 @@ function initMap() {
 
             closeAlert();
 
-            //Crear infoWindow
-            var infoWindow = new google.maps.InfoWindow({map: map});
+
+            var marker = new google.maps.Marker({
+                map: map,
+                position: pos,
+                icon: 'images/MarkerBE.png',
+                animation: google.maps.Animation.DROP
+            });
+
+            //Create infoWindow
+            infoWindow = new google.maps.InfoWindow({map: map});
 
             infoWindow.setPosition(pos);
             infoWindow.setContent('Location found');
             map.setCenter(pos);
-            //marker.setPosition(pos);
 
-            // Set Places
+            // Set Places neabry search query
             var service = new google.maps.places.PlacesService(map);
             service.nearbySearch({
                 location: pos,
@@ -239,7 +259,7 @@ function initMap() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
     }else{
-        //El buscador no soporta geoLocation
+        //Browser dosent suppoort geolocation
         handleLocationError(false, infoWindow, map.getCenter());
     }
 }
@@ -264,9 +284,14 @@ function callback(results, status) {
     }
 }
 
+//Function called when button is clicked and verified
 function buttonClicked (){
 
-    var randomInt = parseInt(Math.random() * placesResults.length);
+    //loop to avoid reslection
+    while(randomInt == lastResultIndex){
+        randomInt = parseInt(Math.random() * placesResults.length);
+    }
+    lastResultIndex = randomInt;
 
     createMarker(placesResults[randomInt]);
     setDirection(placesResults[randomInt]);
@@ -274,7 +299,7 @@ function buttonClicked (){
 
 }
 
-//Maneja logica y procedimiento para renderizar el camino
+//Manages logci and procedure to render map
 function setDirection(location){
     // Set destination, origin and travel mode.
     var request = {
@@ -295,6 +320,7 @@ function setDirection(location){
     });
 }
 
+//Create marker at place
 function createMarker(place) {
 
     //delete existing markers
@@ -307,12 +333,15 @@ function createMarker(place) {
 
     var marker = new google.maps.Marker({
         map: map,
-        position: place.geometry.location
+        position: place.geometry.location,
+        icon: 'images/MarkerB.png',
+        animation: google.maps.Animation.DROP
     });
     //push marker into markers array
     markers.push(marker);
 }
 
+//Update place info
 function setInfo(place){
 
     $placeName.text(place.name);
