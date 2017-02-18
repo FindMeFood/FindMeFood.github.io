@@ -12,8 +12,8 @@ $placeName = $('#nombre');
 $placeImg = $('#imagen');
 $placeDescription = $('#descripcion');
 
-// $alert = $('#alert').remove();
-// $alert.append('<span class="closebtn">&times;</span>' + "Pene");
+$alert = $('#alert');
+// $alert.html('<span class="closebtn">&times;</span>' + "Pene");
 
 //Global variables
 var map;                        //google map object
@@ -217,9 +217,6 @@ function initMap() {
         }
     });
 
-    //Inicialisar infoWindow
-    var infoWindow;
-
     //Try HTML5 geolocation
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(position){
@@ -235,15 +232,10 @@ function initMap() {
             var marker = new google.maps.Marker({
                 map: map,
                 position: pos,
-                icon: 'images/MarkerBE.png',
+                icon: 'images/MarkerB.png',
                 animation: google.maps.Animation.DROP
             });
 
-            //Create infoWindow
-            infoWindow = new google.maps.InfoWindow({map: map});
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found');
             map.setCenter(pos);
 
             // Set Places neabry search query
@@ -256,20 +248,20 @@ function initMap() {
 
         },
         function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+            handleLocationError(true, map.getCenter());
         });
     }else{
         //Browser dosent suppoort geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        handleLocationError(false, map.getCenter());
     }
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
+function handleLocationError(browserHasGeolocation, pos) {
+
     if(browserHasGeolocation){
-        infoWindow.setContent('Error: The Geoloaction service failed.');
+        $alert.html('<span class="closebtn">&times;</span>' + "Error: The Geoloaction service failed.");
     }else{
-        infoWindow.setContent('Error: Your browser dosen\'t support geoloaction.');
+        $alert.html('<span class="closebtn">&times;</span>' + "Error: Your browser dosen\'t support geoloaction.");
     }
 }
 
@@ -334,7 +326,7 @@ function createMarker(place) {
     var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location,
-        icon: 'images/MarkerB.png',
+        icon: 'images/MarkerW.png',
         animation: google.maps.Animation.DROP
     });
     //push marker into markers array
