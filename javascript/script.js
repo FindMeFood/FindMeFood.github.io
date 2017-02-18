@@ -11,192 +11,160 @@ $placeInfo = $('#placeInfo').hide();
 $placeName = $('#nombre');
 $placeImg = $('#imagen');
 $placeDescription = $('#descripcion');
-
+$placePhone = $('#phone');
+$placeRating = $('#rating');
 $alert = $('#alert');
-// $alert.html('<span class="closebtn">&times;</span>' + "Pene");
+
+//Create XMLHttpRequest Object for jason ajax maniopuakltiojn
+var xhr = new XMLHttpRequest();
 
 //Global variables
-var map;                        //google map object
-var pos;                        //client position
-var directionsDisplay;          //direction display object
-var placesResults;              //resultsObjects array
-var gotResults = false;         //boolean to enable resaraunt recomendation start
-var lastResultIndex = -1;       //variable to avoid place RErecomendation
-var randomInt = 0;              //variable to avoid place RErecomendation
-var markers = [];               //markerObject array, helps delete them
-var nightStyle = [
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#bdbdbd"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#eeeeee"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e5e5e5"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#ffffff"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dadada"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "transit",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#ff0500"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e5e5e5"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.station",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#eeeeee"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#c9c9c9"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  }
+var map; //google map object
+var pos; //client position
+var service; //places library service object
+var directionsDisplay; //direction display object
+var placesResults; //resultsObjects array
+var gotResults = false; //boolean to enable resaraunt recomendation start
+var lastResultIndex = -1; //variable to avoid place RErecomendation
+var randomInt = 0; //variable to avoid place RErecomendation
+var markers = []; //markerObject array, helps delete them
+var nightStyle = [{
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#f5f5f5"
+        }]
+    },
+    {
+        "elementType": "labels.icon",
+        "stylers": [{
+            "visibility": "off"
+        }]
+    },
+    {
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#616161"
+        }]
+    },
+    {
+        "elementType": "labels.text.stroke",
+        "stylers": [{
+            "color": "#f5f5f5"
+        }]
+    },
+    {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#bdbdbd"
+        }]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#eeeeee"
+        }]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#757575"
+        }]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#e5e5e5"
+        }]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#9e9e9e"
+        }]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#ffffff"
+        }]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#757575"
+        }]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#dadada"
+        }]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#616161"
+        }]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#9e9e9e"
+        }]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#ff0500"
+        }]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#e5e5e5"
+        }]
+    },
+    {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#eeeeee"
+        }]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [{
+            "color": "#c9c9c9"
+        }]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "color": "#9e9e9e"
+        }]
+    }
 ];
 
 function initMap() {
     //Initial positon
-    var initLocation = {lat: 25.6515651, lng: -100.2895398};
+    var initLocation = {
+        lat: 25.6515651,
+        lng: -100.2895398
+    };
 
     //Initianlise map
     map = new google.maps.Map(document.getElementById('map'), {
@@ -218,39 +186,39 @@ function initMap() {
     });
 
     //Try HTML5 geolocation
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(function(position){
-            //position is a retrived paramter
-            pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+                //position is a retrived paramter
+                pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
 
-            closeAlert();
+                closeAlert();
 
 
-            var marker = new google.maps.Marker({
-                map: map,
-                position: pos,
-                icon: 'images/MarkerB.png',
-                animation: google.maps.Animation.DROP
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: pos,
+                    icon: 'images/MarkerB.png',
+                    animation: google.maps.Animation.DROP
+                });
+
+                map.setCenter(pos);
+
+                // Set Places neabry search query
+                service = new google.maps.places.PlacesService(map);
+                service.nearbySearch({
+                    location: pos,
+                    radius: 1000,
+                    type: ['food']
+                }, callback);
+
+            },
+            function() {
+                handleLocationError(true, map.getCenter());
             });
-
-            map.setCenter(pos);
-
-            // Set Places neabry search query
-            var service = new google.maps.places.PlacesService(map);
-            service.nearbySearch({
-                location: pos,
-                radius: 1000,
-                type: ['food']
-            }, callback);
-
-        },
-        function() {
-            handleLocationError(true, map.getCenter());
-        });
-    }else{
+    } else {
         //Browser dosent suppoort geolocation
         handleLocationError(false, map.getCenter());
     }
@@ -258,9 +226,9 @@ function initMap() {
 
 function handleLocationError(browserHasGeolocation, pos) {
 
-    if(browserHasGeolocation){
+    if (browserHasGeolocation) {
         $alert.html('<span class="closebtn">&times;</span>' + "Error: The Geoloaction service failed.");
-    }else{
+    } else {
         $alert.html('<span class="closebtn">&times;</span>' + "Error: Your browser dosen\'t support geoloaction.");
     }
 }
@@ -277,22 +245,28 @@ function callback(results, status) {
 }
 
 //Function called when button is clicked and verified
-function buttonClicked (){
+function buttonClicked() {
 
     //loop to avoid reslection
-    while(randomInt == lastResultIndex){
+    while (randomInt == lastResultIndex) {
         randomInt = parseInt(Math.random() * placesResults.length);
     }
     lastResultIndex = randomInt;
 
-    createMarker(placesResults[randomInt]);
-    setDirection(placesResults[randomInt]);
-    setInfo(placesResults[randomInt]);
-
+    //request more details for object
+    service.getDetails({
+        placeId: placesResults[randomInt].place_id
+    }, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            createMarker(place);
+            setDirection(place);
+            setInfo(place);
+        }
+    });
 }
 
 //Manages logci and procedure to render map
-function setDirection(location){
+function setDirection(location) {
     // Set destination, origin and travel mode.
     var request = {
         destination: location.geometry.location,
@@ -316,8 +290,8 @@ function setDirection(location){
 function createMarker(place) {
 
     //delete existing markers
-    if(markers.length > 0){
-        for(i=0; i<markers.length; i++){
+    if (markers.length > 0) {
+        for (i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
         markers = [];
@@ -334,17 +308,24 @@ function createMarker(place) {
 }
 
 //Update place info
-function setInfo(place){
+function setInfo(place) {
 
     $placeName.text(place.name);
-    // $placeImg.attr('src = ' + place.photos[0]);
-    $placeDescription.text('Rating: ' + place.rating);
+    if(place.photos){
+        $placeImg.attr("src", place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 200}));
+    }else{
+        $placeImg.removeAttr("src");
+    }
+    $placeDescription.text(place.formatted_address);
+    $placePhone.text("Phone : " +place.international_phone_number);
+    $placeRating.text("Rating : " + place.rating);
+
 
     $placeInfo.fadeIn();
 }
 
 //Close "enable location services" alert
-function closeAlert(){
+function closeAlert() {
 
     // Get the parent of <span class="closebtn"> (<div class="alert">)
     var div = document.getElementById("alert");
@@ -353,14 +334,16 @@ function closeAlert(){
     div.style.opacity = "0";
 
     // Hide the div after 600ms (the same amount of milliseconds it takes to fade out)
-    setTimeout(function(){ div.style.display = "none"; }, 600);
+    setTimeout(function() {
+        div.style.display = "none";
+    }, 600);
 }
 
 //Function to Rotate image when clciked, snabbt Framework.
-function rotateImg(e){
+function rotateImg(e) {
     //window.alert("rotando imagen")
-    snabbt( e.target, 'attention', {
-        rotation: [0, 0, Math.PI/2],
+    snabbt(e.target, 'attention', {
+        rotation: [0, 0, Math.PI / 2],
         springConstant: 1.9,
         springDeceleration: 0.9,
     });
@@ -377,7 +360,7 @@ $(function() {
     $button.on('click', function(e) {
         //window.alert("picaste");
         rotateImg(e);
-        if(gotResults){
+        if (gotResults) {
             buttonClicked();
         }
     });
