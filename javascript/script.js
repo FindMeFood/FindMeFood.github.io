@@ -10,15 +10,11 @@ $placeInfo = $('#placeInfo').hide();
 //Jquery objects
 $placeName = $('#nombre');
 $placeImg = $('#imagen');
-$placeDescription = $('#descripcion');
 $placeWebsite = $('#website');
 $placeMaps = $('#maps');
 $placePhone = $('#phone');
 $placeRating = $('#rating');
 $alert = $('#alert');
-
-//Create XMLHttpRequest Object for jason ajax maniopuakltiojn
-var xhr = new XMLHttpRequest();
 
 //Global variables
 var map; //google map object
