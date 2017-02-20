@@ -22,7 +22,7 @@ html,body, #wrapper{
 	border-style: solid;
     border-color: #000;
 }
-#placeInfo h1, #placeInfo p {
+#placeInfo h1, #placeInfo p{
 	margin: 5px;
 }
 #placeInfo h1 {
@@ -44,7 +44,7 @@ html,body, #wrapper{
 }
 
 @media (max-width: 765px) {
-    #aboveMap img{
+    #logo{
 		height: 100px;
 
 		margin-top: -50px; /* Negative half of height. */

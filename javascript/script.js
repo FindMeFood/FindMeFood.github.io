@@ -11,6 +11,8 @@ $placeInfo = $('#placeInfo').hide();
 $placeName = $('#nombre');
 $placeImg = $('#imagen');
 $placeDescription = $('#descripcion');
+$placeWebsite = $('#website');
+$placeMaps = $('#maps');
 $placePhone = $('#phone');
 $placeRating = $('#rating');
 $alert = $('#alert');
@@ -200,7 +202,7 @@ function initMap() {
                 var marker = new google.maps.Marker({
                     map: map,
                     position: pos,
-                    icon: 'images/MarkerB.png',
+                    icon: 'images/MarkerBE.png',
                     animation: google.maps.Animation.DROP
                 });
 
@@ -300,7 +302,7 @@ function createMarker(place) {
     var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location,
-        icon: 'images/MarkerW.png',
+        icon: 'images/MarkerWE.png',
         animation: google.maps.Animation.DROP
     });
     //push marker into markers array
@@ -310,15 +312,45 @@ function createMarker(place) {
 //Update place info
 function setInfo(place) {
 
+    console.log(place);
+    //Place Name
     $placeName.text(place.name);
+
+    //Place Photo
     if(place.photos){
         $placeImg.attr("src", place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 200}));
     }else{
         $placeImg.removeAttr("src");
     }
-    $placeDescription.text(place.formatted_address);
-    $placePhone.text("Phone : " +place.international_phone_number);
-    $placeRating.text("Rating : " + place.rating);
+
+    //Place Website
+    if(place.website){
+        $placeWebsite.text("Website").attr("href", place.website);
+    }else{
+        $placeWebsite.text("");
+    }
+
+    //Place Maps
+    if(place.url){
+        $placeMaps.text("Maps").attr("href", place.url);
+    }else{
+        $placeMaps.text("");
+    }
+
+    //Place Phone
+    if(place.international_phone_number){
+        $placePhone.text("Phone : " + place.international_phone_number);
+    }else{
+        $placePhone.text("");
+    }
+
+    //Place Rating
+    if(place.rating){
+        $placeRating.text("Rating : " + place.rating);
+    }else{
+        $placeRating.text("");
+    }
+
 
 
     $placeInfo.fadeIn();
