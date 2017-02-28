@@ -8,5 +8,3 @@ Tools
 - Javascript
 - Google Maps API & Places Library
 - snabbt.js
-
-[Temporary gh-pages link](https://eduaguilar96.github.io/FindMeFoodWeb/)
